@@ -1,0 +1,26 @@
+Bootstrap: docker
+From: rockylinux:9
+
+%post
+    # Update and install
+    dnf -y update && dnf -y install python3-pip git && dnf clean all
+    # Update/install pip
+    python3 -m pip install pip --upgrade
+    # Create and activate virtual environment
+    python3 -m pip install --user virtualenv && python3 -m venv /opt/venv
+    # Use source to activate the virtual environment
+    source /opt/venv/bin/activate
+    # Install laser from commit
+    python3 -m pip install git+https://github.com/InstituteforDiseaseModeling/laser.git
+    
+%runscript
+
+%environment
+    # Set the environment to automatically use the virtual environment
+    export PATH="/opt/venv/bin:$PATH"
+
+%labels
+    Author katherine.rosenfeld@gatesfoundation.org
+
+%help
+    Container for running LASER on COMPS
