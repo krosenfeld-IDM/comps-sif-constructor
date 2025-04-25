@@ -1,7 +1,9 @@
 """ 
 This script is used to create a Singularity image file from a Singularity definition file.
+
 Usage:
-python -m project.comps.create_sif -d <path_to_definition_file> -o <output_id> -i <image_name> -w <work_item_name>
+    python -m comps_sif_constructor.create_sif -d <path_to_definition_file> -o <output_id> -i <image_name> -w <work_item_name> [-r <requirements_file>]
+    comps_sif_constructor -d <path_to_definition_file> -o <output_id> -i <image_name> -w <work_item_name> [-r <requirements_file>]
 """
 
 import argparse
@@ -9,7 +11,7 @@ from idmtools.core.platform_factory import Platform
 from idmtools_platform_comps.utils.singularity_build import SingularityBuildWorkItem
 from idmtools.assets.file_list import FileList
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--definition_file", "-d", type=str, help="Path to the Singularity definition file"
@@ -43,5 +45,7 @@ if __name__ == "__main__":
     sbi.tags = dict(my_key="my_value")
     sbi.run(wait_until_done=True, platform=platform)
     if sbi.succeeded:
-        # Write ID file
         sbi.asset_collection.to_id_file(args.output_id)
+
+if __name__ == "__main__":
+    main()

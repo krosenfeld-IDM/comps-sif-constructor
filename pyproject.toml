@@ -10,6 +10,9 @@ dependencies = [
     "idmtools_models==1.7.10",
 ]
 
+[project.scripts]
+comps_sif_constructor = "comps_sif_constructor.create_sif:main"
+
 [[tool.uv.index]]
 # Optional name for the index.
 name = "idm"
