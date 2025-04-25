@@ -1,0 +1,27 @@
+[project]
+name = "comps-sif-constructor"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "idmtools==1.7.10",
+    "idmtools_platform_comps==1.7.10",
+    "idmtools_models==1.7.10",
+]
+
+[[tool.uv.index]]
+# Optional name for the index.
+name = "idm"
+# Required URL for the index.
+url = "https://packages.idmod.org/api/pypi/pypi-production/simple"
+
+
+[tool.uv.sources]
+idmtools = { index = "idm" }
+idmtools_platform_comps = { index = "idm" }
+idmtools_models = { index = "idm" }
+
+[build-system]
+requires = ["hatchling>=1.11.0"]
+build-backend = "hatchling.build"
