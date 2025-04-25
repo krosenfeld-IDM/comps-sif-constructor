@@ -10,6 +10,8 @@ import argparse
 from idmtools.core.platform_factory import Platform
 from idmtools_platform_comps.utils.singularity_build import SingularityBuildWorkItem
 from idmtools.assets.file_list import FileList
+import traceback
+import sys
 
 def main():
     parser = argparse.ArgumentParser()
@@ -43,7 +45,13 @@ def main():
         **kwargs
     )
     sbi.tags = dict(my_key="my_value")
-    sbi.run(wait_until_done=True, platform=platform)
+    try:
+        sbi.run(wait_until_done=True, platform=platform)
+    except AttributeError as e:
+        print(f"AttributeError during COMPS build: {e}")
+        traceback.print_exc()
+        sys.exit(1)
+
     if sbi.succeeded:
         sbi.asset_collection.to_id_file(args.output_id)
 

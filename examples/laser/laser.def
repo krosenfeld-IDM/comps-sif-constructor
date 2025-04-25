@@ -3,7 +3,7 @@ From: rockylinux:9
 
 %post
     # Update and install
-    dnf -y update && dnf -y install python3-pip git && dnf clean all
+    dnf -y update && dnf -y install python3-pip git python3-devel && dnf clean all
     # Update/install pip
     python3 -m pip install pip --upgrade
     # Create and activate virtual environment
@@ -11,7 +11,9 @@ From: rockylinux:9
     # Use source to activate the virtual environment
     source /opt/venv/bin/activate
     # Install laser from commit
-    python3 -m pip install git+https://github.com/InstituteforDiseaseModeling/laser.git
+    python3 -m pip install git+https://github.com/InstituteforDiseaseModeling/laser.git@2ce4764876daa91d69b2212c02d1bec3b5b8ec7e
+    # Install other dependencies
+    python3 -m pip install sciris
     
 %runscript
 
