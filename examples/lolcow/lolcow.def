@@ -3,14 +3,14 @@ From: ubuntu:16.04
 
 %post
     apt-get -y update
-    apt-get -y install fortune cowsay lolcat
+    apt-get -y install cowsay lolcat
 
 %environment
     export LC_ALL=C
     export PATH=/usr/games:$PATH
 
 %runscript
-    fortune | cowsay | lolcat
+    echo "Add your own message!" | cowsay | lolcat
 
 %help
 https://docs.sylabs.io/guides/3.0/user-guide/build_a_container.html
