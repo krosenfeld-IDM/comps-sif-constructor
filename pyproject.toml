@@ -1,6 +1,6 @@
 [project]
 name = "comps-sif-constructor"
-version = "0.0.3"
+version = "0.0.4"
 description = "Create a SIF file from a Singularity definition file for COMPS"
 authors = [
   { name="Katherine Rosenfeld"},
@@ -63,7 +63,7 @@ dev = [
 ]
 
 [tool.bumpversion]
-current_version = "0.0.3"
+current_version = "0.0.4"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
