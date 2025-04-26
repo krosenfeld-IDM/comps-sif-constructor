@@ -9,9 +9,9 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "idmtools @ https://packages.idmod.org/ui/repos/tree/General/idm-pypi-production/idmtools/1.7.10/idmtools-1.7.10-py3-none-any.whl",
-    "idmtools_platform_comps @ https://packages.idmod.org/ui/repos/tree/General/idm-pypi-production/idmtools-platform-comps/1.7.10/idmtools_platform_comps-1.7.10-py3-none-any.whl",
-    "idmtools_models@ https://packages.idmod.org/ui/repos/tree/General/idm-pypi-production/idmtools-models/1.7.10/idmtools_models-1.7.10-py3-none-any.whl",
+    "idmtools @ https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools/1.7.10/idmtools-1.7.10-py3-none-any.whl",
+    "idmtools_platform_comps @ https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools-platform-comps/1.7.10/idmtools_platform_comps-1.7.10-py3-none-any.whl",
+    "idmtools_models@ https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools-models/1.7.10/idmtools_models-1.7.10-py3-none-any.whl",
 ]
 
 [project.scripts]
