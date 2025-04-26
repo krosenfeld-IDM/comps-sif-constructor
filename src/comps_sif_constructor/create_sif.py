@@ -13,16 +13,16 @@ from idmtools.assets.file_list import FileList
 import traceback
 import sys
 
-def main():
+def main(file='lolcow.def'):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--definition_file", "-d", type=str, help="Path to the Singularity definition file"
+        "--definition_file", "-d", type=str, help="Path to the Singularity definition file", default=file
     )
     parser.add_argument(
         "--output_id", "-o", type=str, help="Name out Asset id file", default="sif.id"
     )
     parser.add_argument(
-        "--image_name", "-i", type=str, help="Name of the Singularity image file", default="laser_0.0.1.sif"
+        "--image_name", "-i", type=str, help="Name of the Singularity image file", default="lolcow_0.0.1.sif"
     )
     parser.add_argument(
         "--work_item_name", "-w",

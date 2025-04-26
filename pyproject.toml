@@ -9,21 +9,53 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "idmtools @ https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools/1.7.10/idmtools-1.7.10-py3-none-any.whl",
-    "idmtools_platform_comps @ https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools-platform-comps/1.7.10/idmtools_platform_comps-1.7.10-py3-none-any.whl",
-    "idmtools_models@ https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools-models/1.7.10/idmtools_models-1.7.10-py3-none-any.whl",
-    "pycomps @ https://packages.idmod.org:443/artifactory/idm-pypi-production/pyCOMPS/2.10.0/pyCOMPS-2.10.0-py2.py3-none-any.whl"
+    "backoff>=2.2.1",
+    "coloredlogs>=15.0.1",
+    "diskcache>=5.6.3",
+    "filelock>=3.18.0",
+    "future>=1.0.0",
+    "jinja2>=3.1.6",
+    "more-itertools>=10.7.0",
+    "numpy>=2.0.2",
+    "packaging>=25.0",
+    "pandas>=2.2.3",
+    "pluggy>=1.5.0",
+    "pyyaml>=6.0.2",
+    "requests>=2.32.3",
+    "tqdm>=4.67.1",
+    "xdg>=6.0.0",
 ]
 
 [project.scripts]
 comps_sif_constructor = "comps_sif_constructor.create_sif:main"
 
+[project.entry-points.idmtools_experiment]
+idmtools_experiment = "idmtools.entities.experiment:ExperimentSpecification"
+
+[project.entry-points.idmtools_task]
+idmtools_task_command = "idmtools.entities.command_task:CommandTaskSpecification"
+idmtools_task_docker  = "idmtools.core.docker_task:DockerTaskSpecification"
+
+[project.entry-points.idmtools_hooks]
+idmtools_add_git_tag            = "idmtools.plugins.git_commit"
+idmtools_id_generate_uuid       = "idmtools.plugins.uuid_generator"
+idmtools_id_generate_item_sequence = "idmtools.plugins.item_sequence"
+
+[project.entry-points.idmtools_platform]
+idmtools_platform_comps = "idmtools_platform_comps.plugin_info:COMPSPlatformSpecification"
+idmtools_platform_ssmt = "idmtools_platform_comps.plugin_info:SSMTPlatformSpecification"
+
+
 [build-system]
 requires = ["hatchling>=1.11.0"]
 build-backend = "hatchling.build"
 
-[tool.hatch.metadata]
-allow-direct-references = true
+[tool.hatch.build]
+packages = ["src"]
+exclude = ["src/.*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/comps_sif_constructor", "src/idmtools", "src/idmtools_models", "src/idmtools_platform_comps", "src/COMPS"]
 
 [dependency-groups]
 dev = [

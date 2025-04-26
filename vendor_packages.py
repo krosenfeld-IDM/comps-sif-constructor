@@ -12,7 +12,7 @@ from pathlib import Path
 
 # package name to wheel URL map
 packages = {
-    "idmtools": "https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools/1.7.10/idmtools-1.7.10-py3-none-any.whl",
+    "idmtools": "https://packages.idmod.org/api/pypi/pypi-production/idmtools/1.7.10/idmtools-1.7.10-py3-none-any.whl",
     "idmtools_platform_comps": "https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools-platform-comps/1.7.10/idmtools_platform_comps-1.7.10-py3-none-any.whl",
     "idmtools_models": "https://packages.idmod.org:443/artifactory/idm-pypi-production/idmtools-models/1.7.10/idmtools_models-1.7.10-py3-none-any.whl",
     "COMPS": "https://packages.idmod.org:443/artifactory/idm-pypi-production/pyCOMPS/2.11.0/pyCOMPS-2.11.0-py2.py3-none-any.whl",
