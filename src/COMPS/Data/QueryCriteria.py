@@ -154,7 +154,7 @@ class QueryCriteria(object):
             pd['children'] = ','.join(ent_type.py2rest(self._children))
 
         if len(self._filters) > 0:
-            tups = [ (f, re.search('\W', f)) for f in self._filters ]
+            tups = [ (f, re.search(r'\W', f)) for f in self._filters ]
 
             keys = [ f[:r.start()] if r else f for f, r in tups ]
             vals = [ f[r.start():] if r else f for f, r in tups ]
