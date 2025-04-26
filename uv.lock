@@ -188,7 +188,7 @@ wheels = [
 
 [[package]]
 name = "comps-sif-constructor"
-version = "0.0.1"
+version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "idmtools" },
@@ -203,9 +203,9 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "idmtools", specifier = "==1.7.10", index = "https://packages.idmod.org/api/pypi/pypi-production/simple" },
-    { name = "idmtools-models", specifier = "==1.7.10", index = "https://packages.idmod.org/api/pypi/pypi-production/simple" },
-    { name = "idmtools-platform-comps", specifier = "==1.7.10", index = "https://packages.idmod.org/api/pypi/pypi-production/simple" },
+    { name = "idmtools", index = "https://packages.idmod.org/api/pypi/pypi-production/simple" },
+    { name = "idmtools-models", index = "https://packages.idmod.org/api/pypi/pypi-production/simple" },
+    { name = "idmtools-platform-comps", index = "https://packages.idmod.org/api/pypi/pypi-production/simple" },
 ]
 
 [package.metadata.requires-dev]
