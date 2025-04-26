@@ -1,6 +1,16 @@
 # comps-sif-constructor
 Create SIF images for COMPS
 
+To use (with [uv](https://docs.astral.sh/uv/getting-started/installation/)):
+```bash
+uvx comps_sif_constructor lolcow.def
+```
+
+This will launch the image creation on COMPS and leave behind a `sif.id` for the jobs that need the image.
+
+## Usage
+
+
 ```bash
 comps_sif_constructor -h
 usage: comps_sif_constructor [-h] [--definition_file DEFINITION_FILE] [--output_id OUTPUT_ID] [--image_name IMAGE_NAME] [--work_item_name WORK_ITEM_NAME] [--requirements REQUIREMENTS]
@@ -18,8 +28,6 @@ options:
   --requirements REQUIREMENTS, -r REQUIREMENTS
                         Path to the requirements file
 ```
-
-## Usage
 
 To create a Singularity image from a definition file:
 
