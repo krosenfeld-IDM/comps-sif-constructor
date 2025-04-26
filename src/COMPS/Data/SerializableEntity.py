@@ -108,7 +108,7 @@ class SerializableEntity(object):
             # logger.debug('prop_map - ' + str(prop_map))
             build_dict = {}
             for name in SerializableEntity.__prop_strs_map[cls.__name__]:
-                if name[0] is not '_' or include_hidden_props:
+                if (name[0] != '_') or include_hidden_props:
                     attr = getattr(obj, name)
                     if attr is not None or include_nulls:
                         prop_name = prop_map[name] if prop_map else name
