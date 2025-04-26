@@ -1,7 +1,11 @@
 [project]
 name = "comps-sif-constructor"
 version = "0.0.1"
-description = "Add your description here"
+description = "Create a SIF file from a Singularity definition file for COMPS"
+authors = [
+  { name="Katherine Rosenfeld"},
+  { name="Kurt Frey"}
+]
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
