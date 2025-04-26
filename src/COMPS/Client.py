@@ -70,7 +70,7 @@ class Client(object):
 
         tmphoststring = hoststring.rstrip('/')
 
-        match_obj = re.match('(?:(https?)(?:://))?([\w.-]*)(?:(?::)(\d+))?$', tmphoststring)
+        match_obj = re.match(r'(?:(https?)(?:://))?([\w\.-]*)(?:(?::)(\d+))?$', tmphoststring)
 
         if match_obj is None:
             raise RuntimeError('Invalid format for host string: "{0}".  See help for correct usage.'.format(hoststring))
