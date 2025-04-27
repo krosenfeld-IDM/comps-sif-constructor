@@ -20,16 +20,16 @@ options:
   --definition_file DEFINITION_FILE, -d DEFINITION_FILE
                         Path to the Singularity definition file
   --output_id OUTPUT_ID, -o OUTPUT_ID
-                        Name out Asset id file
+                        (optional) Name out Asset id file
   --image_name IMAGE_NAME, -i IMAGE_NAME
-                        Name of the Singularity image file
+                        (optional) Name of the Singularity image file
   --work_item_name WORK_ITEM_NAME, -w WORK_ITEM_NAME
-                        Name of the work item
+                        (optional) Name of the work item
   --requirements REQUIREMENTS, -r REQUIREMENTS
-                        Path to the requirements file
+                        (optional) Path to the requirements file
 ```
 
-To create a Singularity image from a definition file:
+To create a Apptainer/Singularity image on COMPS from a definition file:
 
 ```bash
 python -m comps_sif_constructor.create_sif \
@@ -51,4 +51,6 @@ comps_sif_constructor \
   [-r <requirements_file>]
 ```
 
+## Resources
+- Learn about [definition files](https://apptainer.org/docs/user/latest/definition_files.html#definition-files)
 
