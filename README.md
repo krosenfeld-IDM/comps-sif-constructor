@@ -3,7 +3,7 @@ Create SIF images for COMPS
 
 To use (with [uv](https://docs.astral.sh/uv/getting-started/installation/)):
 ```bash
-uvx comps_sif_constructor lolcow.def
+uvx comps_sif_constructor -d lolcow.def
 ```
 
 This will launch the image creation on COMPS and leave behind a `sif.id` for the jobs that need the image.
