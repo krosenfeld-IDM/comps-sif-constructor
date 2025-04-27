@@ -1,16 +1,16 @@
-Bootstrap: docker
-From: ubuntu:16.04
+BootStrap: docker
+From: ubuntu:22.04
 
 %post
-    apt-get -y update
-    apt-get -y install cowsay lolcat
+   apt-get -y update
+   apt-get -y install cowsay lolcat
 
 %environment
-    export LC_ALL=C
-    export PATH=/usr/games:$PATH
+   export LC_ALL=C
+   export PATH=/usr/games:$PATH
 
 %runscript
-    echo "Add your own message!" | cowsay | lolcat
+   date | cowsay | lolcat
 
-%help
-https://docs.sylabs.io/guides/3.0/user-guide/build_a_container.html
+%labels
+   https://apptainer.org/docs/user/latest/quick_start.html#working-with-files
