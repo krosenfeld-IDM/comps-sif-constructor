@@ -19,18 +19,18 @@ def main(file='lolcow.def'):
         "--definition_file", "-d", type=str, help="Path to the Singularity definition file", default=file
     )
     parser.add_argument(
-        "--output_id", "-o", type=str, help="Name out Asset id file", default="sif.id"
+        "--output_id", "-o", type=str, help="(optional) Name out Asset id file", default="sif.id"
     )
     parser.add_argument(
-        "--image_name", "-i", type=str, help="Name of the Singularity image file", default="lolcow_0.0.1.sif"
+        "--image_name", "-i", type=str, help="(optional) Name of the Singularity image file", default="lolcow_0.0.1.sif"
     )
     parser.add_argument(
         "--work_item_name", "-w",
         type=str,
-        help="Name of the work item",
+        help="(optional) Name of the work item",
         default="Singularity Build",
     )
-    parser.add_argument("--requirements", "-r", type=str, help="Path to the requirements file", default=None)
+    parser.add_argument("--requirements", "-r", type=str, help="(optional) Path to the requirements file", default=None)
     args = parser.parse_args()
 
     kwargs = {}
