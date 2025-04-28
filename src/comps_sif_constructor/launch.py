@@ -8,7 +8,6 @@ from typing import Optional
 from idmtools.assets import AssetCollection, Asset
 from idmtools.entities.command_task import CommandTask
 
-
 @dataclass
 class ConfigCommandTask(CommandTask):
     """
@@ -46,6 +45,9 @@ class ConfigCommandTask(CommandTask):
         ) 
 
 def update_parameter_callback(simulation, **kwargs):
+    """
+    Update the parameters for the simulation.
+    """
     for k,v in kwargs.items():
         simulation.task.set_parameter(k, v)
     return kwargs
