@@ -7,6 +7,12 @@ from typing import Optional
 
 from idmtools.assets import AssetCollection, Asset
 from idmtools.entities.command_task import CommandTask
+from idmtools.core.platform_factory import Platform
+from idmtools.entities import CommandLine
+from idmtools.builders import SimulationBuilder
+from idmtools.entities.experiment import Experiment
+from idmtools.entities.templated_simulation import TemplatedSimulations
+from idmtools_platform_comps.utils.scheduling import add_schedule_config
 
 @dataclass
 class ConfigCommandTask(CommandTask):
@@ -51,3 +57,62 @@ def update_parameter_callback(simulation, **kwargs):
     for k,v in kwargs.items():
         simulation.task.set_parameter(k, v)
     return kwargs
+
+class CompsExperiment:
+    """
+    A class to handle COMPS experiment deployment and management.
+    """
+    def __init__(self, name='python', num_threads=1, priority="AboveNormal"):
+        """
+        Initialize the CompsExperiment.
+        
+        Args:
+            name: Name of the experiment
+            num_threads: Number of threads to use
+            priority: Priority level for the experiment
+        """
+        self.name = name
+        self.num_threads = num_threads
+        self.priority = priority
+
+    def deploy(self):
+        """Deploy the experiment to COMPS."""
+        # Create a platform to run the workitem
+        platform = Platform("CALCULON", priority=self.priority)
+
+        # create commandline input for the task
+        cmdline = "singularity exec ./Assets/python_0.0.1.sif bash run.sh"
+        command = CommandLine(cmdline)
+        task = ConfigCommandTask(command=command)
+
+        # Add our image
+        task.common_assets.add_assets(AssetCollection.from_id_file("sif.id"))
+
+        # Add simulation script
+        task.transient_assets.add_or_replace_asset(Asset(filename="run.sh"))
+
+        # Add analysis scripts
+        sb = SimulationBuilder()
+        sb.add_sweep_definition(lambda simulation, id: simulation.task.set_parameter("id", id), range(1,5))
+
+        ts = TemplatedSimulations(base_task=task)
+        ts.add_builder(sb)
+        add_schedule_config(
+            ts,
+            command=cmdline,
+            NumNodes=1,
+            num_cores=self.num_threads,
+            node_group_name="idm_48cores",
+            Environment={"NUMBA_NUM_THREADS": str(self.num_threads),
+                        "PYTHONPATH": ".:./Assets"},
+        )
+        experiment = Experiment.from_template(ts, name=f"{self.name}")
+        experiment.run(wait_until_done=True, scheduling=True)
+
+        if experiment.succeeded:
+            # Setup analyzers
+            experiment.to_id_file("experiment.id")
+            print(f"Experiment {experiment.id} succeeded")
+            return experiment
+        else:
+            raise RuntimeWarning("Experiment failed")
