@@ -4,41 +4,15 @@ https://github.com/gatesfoundation/GEOMED24/blob/main/calibration/calib_hartmann
 import os
 import json
 
-from dataclasses import dataclass, field
-from typing import Optional
-
 from idmtools.assets import AssetCollection, Asset
 from idmtools.core.platform_factory import Platform
 from idmtools.entities import CommandLine
 from idmtools.builders import SimulationBuilder
 from idmtools.entities.experiment import Experiment
 from idmtools.entities.templated_simulation import TemplatedSimulations
-from idmtools.entities.command_task import CommandTask
 from idmtools_platform_comps.utils.scheduling import add_schedule_config
 
-@dataclass
-class ConfigCommandTask(CommandTask):
-    configfile_argument: Optional[str] = field(default="--config")
-
-    def __init__(self, command):
-        self.config = dict()
-        CommandTask.__init__(self, command)
-
-    def set_parameter(self, param_name, value):
-        self.config[param_name] = value
-
-    def gather_transient_assets(self) -> AssetCollection:
-        """
-        Gathers transient assets, primarily the settings.py file.
-
-        Returns:
-            AssetCollection: Transient assets.
-        """
-        # create a json string out of the dict self.config
-        self.transient_assets.add_or_replace_asset(
-            Asset(filename="trial_index.json", content=json.dumps(self.config))
-        )
-
+from comps_sif_constructor.launch import ConfigCommandTask, update_parameter_callback
 
 def deploy(name='python', num_threads=1, priority="AboveNormal"):
     """ Deploy the experiment to COMPS """
@@ -83,15 +57,7 @@ def deploy(name='python', num_threads=1, priority="AboveNormal"):
     else:
         raise RuntimeWarning("Experiment failed")
 
-
-def update_parameter_callback(simulation, **kwargs):
-    for k,v in kwargs.items():
-        simulation.task.set_parameter(k, v)
-    return kwargs
-
-
 if __name__ == "__main__":
-
     # Change directory to the location of this file
     os.chdir(os.path.dirname(__file__))
 
