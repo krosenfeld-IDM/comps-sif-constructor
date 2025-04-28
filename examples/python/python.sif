@@ -16,12 +16,8 @@ From: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 %runscript
     cd /workspace
     source .venv/bin/activate
-    exec "$@"
 
 %environment
-    # Set the environment to automatically use the virtual environment
-    export VIRTUAL_ENV="/workspace/.venv"
-    export PATH="$VIRTUAL_ENV/bin:$PATH"
 
 %labels
     Author katherine.rosenfeld@gatesfoundation.org
