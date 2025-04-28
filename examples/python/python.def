@@ -8,16 +8,19 @@ From: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
     
     # Initialize virtual environment
     uv venv --python 3.12
-    source .venv/bin/activate
+    . .venv/bin/activate
     
     # Install packages
     uv pip install cowsay
 
 %runscript
     cd /workspace
-    source .venv/bin/activate
+    . .venv/bin/activate
 
 %environment
+    export SHELL=/bin/bash
+    export PATH="/workspace/.venv/bin:$PATH"
+    
 
 %labels
     Author katherine.rosenfeld@gatesfoundation.org
