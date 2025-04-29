@@ -28,7 +28,7 @@ dependencies = [
 ]
 
 [project.scripts]
-comps_sif_constructor = "comps_sif_constructor.create_sif:main"
+comps_sif_constructor = "comps_sif_constructor.main:main"
 
 [project.entry-points.idmtools_experiment]
 idmtools_experiment = "idmtools.entities.experiment:ExperimentSpecification"
