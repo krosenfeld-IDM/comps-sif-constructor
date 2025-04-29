@@ -10,5 +10,5 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     # Create and deploy the experiment
-    experiment = CompsExperiment(name='python', num_threads=1, priority="AboveNormal")
+    experiment = CompsExperiment(name='python', num_threads=1, priority="AboveNormal", num_trials=5)
     experiment.deploy()

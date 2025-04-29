@@ -62,7 +62,7 @@ class CompsExperiment:
     """
     A class to handle COMPS experiment deployment and management.
     """
-    def __init__(self, name='python', num_threads=1, priority="AboveNormal"):
+    def __init__(self, name='python', num_threads=1, priority="AboveNormal", num_trials=1, node_group="idm_48cores"):
         """
         Initialize the CompsExperiment.
         
@@ -70,10 +70,14 @@ class CompsExperiment:
             name: Name of the experiment
             num_threads: Number of threads to use
             priority: Priority level for the experiment
+            num_trials: Number of trials to run
+            node_group: Node group to use
         """
         self.name = name
         self.num_threads = num_threads
         self.priority = priority
+        self.num_trials = num_trials
+        self.node_group = node_group
 
     def deploy(self):
         """Deploy the experiment to COMPS."""
@@ -90,11 +94,17 @@ class CompsExperiment:
 
         # Add simulation script
         task.transient_assets.add_or_replace_asset(Asset(filename="run.sh"))
+        # Add the trials (json Dict[list] with the values that can be indexed by the simulation for its parameter values.
+        task.transient_assets.add_or_replace_asset(Asset(filename="trials.jsonl"))
+        # Add the remote script that will run on COMPS
+        task.transient_assets.add_or_replace_asset(Asset(filename="remote.py"))
 
         # Add analysis scripts
         sb = SimulationBuilder()
-        sb.add_sweep_definition(lambda simulation, id: simulation.task.set_parameter("id", id), range(1,5))
-
+        sb.add_multiple_parameter_sweep_definition(
+            lambda simulation, trial_index: update_parameter_callback(simulation, trial_index=trial_index),
+            trial_index=[i for i in range(self.num_trials)]
+    )
         ts = TemplatedSimulations(base_task=task)
         ts.add_builder(sb)
         add_schedule_config(
