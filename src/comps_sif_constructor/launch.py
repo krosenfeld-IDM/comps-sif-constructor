@@ -70,7 +70,6 @@ class CompsExperiment:
             name: Name of the experiment
             num_threads: Number of threads to use
             priority: Priority level for the experiment
-            num_trials: Number of trials to run
             node_group: Node group to use
         """
         self.name = name
