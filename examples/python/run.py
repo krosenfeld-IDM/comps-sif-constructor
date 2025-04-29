@@ -25,15 +25,17 @@ if __name__ == "__main__":
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Run experiment with list or file input.')
-    parser.add_argument('--use-file', type=bool, default=True, help='Use file input instead of list')
+    parser.add_argument('--use-file', type=bool, default=False, help='Use file input instead of list')
     args = parser.parse_args()
 
     # Create and deploy the experiment
-    experiment = CompsExperiment(name='python', num_threads=1, priority="AboveNormal", num_trials=5)
+    experiment = CompsExperiment(name='python', num_threads=1, priority="AboveNormal")
 
     if args.use_file:
+        print("Using file input")
         use_file(experiment)
     else:
+        print("Using list input")
         use_list(experiment)
 
     experiment.deploy()
