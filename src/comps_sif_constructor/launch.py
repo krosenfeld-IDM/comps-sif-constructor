@@ -60,7 +60,7 @@ def update_parameter_callback(simulation, **kwargs):
 
 class CompsExperiment:
     """
-    A class to handle COMPS experiment deployment and management.
+    A class to handle COMPS experiment deployment and management. An experiment is a collection of trials (e.g., simulations).
     """
     def __init__(self, name='python', num_threads=1, priority="AboveNormal", num_trials=1, node_group="idm_48cores"):
         """
@@ -78,6 +78,48 @@ class CompsExperiment:
         self.priority = priority
         self.num_trials = num_trials
         self.node_group = node_group
+        self.trials_content = None
+        self.run_script = None
+        self.remote_script = None
+
+    def plan(self, file_path=None, content: Optional[list[dict] | dict] = None):
+        """
+        Plan the experiment by setting up the trials data.
+        
+        Args:
+            file_path: Path to an existing trials.jsonl file or the content as a string
+            content: A list of dictionaries or a dictionary of lists to be used as trials data
+            
+        Returns:
+            self: For method chaining
+        
+        Note:
+            Either trials or content must be provided
+        """
+        if file_path is not None:
+            if isinstance(file_path, str) and file_path.endswith('.jsonl'):
+                # If trials is a file path, read the file
+                with open(file_path, 'r') as f:
+                    self.trials_content = f.read()
+            else:
+                # Assume trials is the content directly
+                self.trials_content = file_path
+        elif content is not None:
+            # Convert list of dicts 
+            if isinstance(content, list) :
+                for trial in content:
+                    if self.trials_content is None:
+                        self.trials_content = ""
+                    self.trials_content += json.dumps(trial) + "\n"
+            elif isinstance(content, dict):
+                for key, value in content.items():
+                    self.trials_content += json.dumps({key: value}) + "\n"
+            else:
+                raise ValueError("Content must be a list of dictionaries or a dictionary of lists")
+        else:
+            raise ValueError("Either trials or content must be provided")
+        
+        return self
 
     def deploy(self):
         """Deploy the experiment to COMPS."""
@@ -94,8 +136,14 @@ class CompsExperiment:
 
         # Add simulation script
         task.transient_assets.add_or_replace_asset(Asset(filename="run.sh"))
-        # Add the trials (json Dict[list] with the values that can be indexed by the simulation for its parameter values.
-        task.transient_assets.add_or_replace_asset(Asset(filename="trials.jsonl"))
+        
+        # Add the trials JSONL data
+        if self.trials_content is not None:
+            task.transient_assets.add_or_replace_asset(Asset(filename="trials.jsonl", content=self.trials_content))
+        else:
+            # For backward compatibility, try to add an existing file
+            task.transient_assets.add_or_replace_asset(Asset(filename="trials.jsonl"))
+            
         # Add the remote script that will run on COMPS
         task.transient_assets.add_or_replace_asset(Asset(filename="remote.py"))
 
