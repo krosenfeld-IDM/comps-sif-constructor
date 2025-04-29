@@ -62,7 +62,7 @@ class CompsExperiment:
     """
     A class to handle COMPS experiment deployment and management. An experiment is a collection of trials (e.g., simulations).
     """
-    def __init__(self, name='python', num_threads=1, priority="AboveNormal", num_trials=1, node_group="idm_48cores"):
+    def __init__(self, name='python', num_threads=1, priority="AboveNormal", node_group="idm_48cores"):
         """
         Initialize the CompsExperiment.
         
@@ -76,8 +76,8 @@ class CompsExperiment:
         self.name = name
         self.num_threads = num_threads
         self.priority = priority
-        self.num_trials = num_trials
         self.node_group = node_group
+        self.num_trials = None
         self.trials_content = None
         self.run_script = None
         self.remote_script = None
@@ -101,17 +101,24 @@ class CompsExperiment:
                 # If trials is a file path, read the file
                 with open(file_path, 'r') as f:
                     self.trials_content = f.read()
+                    # Count the number of lines to determine num_trials
+                    num_lines = len([line for line in self.trials_content.splitlines() if line.strip()])
+                    self.num_trials = num_lines
             else:
                 # Assume trials is the content directly
                 self.trials_content = file_path
+                # Count the number of lines to determine num_trials
+                num_lines = len([line for line in self.trials_content.splitlines() if line.strip()])
+                self.num_trials = num_lines
         elif content is not None:
             # Convert list of dicts 
-            if isinstance(content, list) :
+            self.trials_content = ""
+            if isinstance(content, list):
+                self.num_trials = len(content)
                 for trial in content:
-                    if self.trials_content is None:
-                        self.trials_content = ""
                     self.trials_content += json.dumps(trial) + "\n"
             elif isinstance(content, dict):
+                self.num_trials = len(list(content.items()))
                 for key, value in content.items():
                     self.trials_content += json.dumps({key: value}) + "\n"
             else:
