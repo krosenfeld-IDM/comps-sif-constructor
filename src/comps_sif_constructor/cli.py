@@ -65,13 +65,17 @@ def create_sif(definition_file, output_id, image_name, work_item_name, requireme
               default="AboveNormal")
 @click.option("--node-group", "-g", type=str, help="Node group to use", default="idm_48cores")
 @click.option("--file", "-f", type=click.Path(exists=True), help="Path to the trials.jsonl file", required=True)
-def launch(name, threads, priority, node_group, file):
+@click.option("--sif-filename", "-s", type=str, help="Name of the singularity image file", default="python_0.0.1.sif")
+@click.option("--sif-id-file", "-i", type=str, help="Path to the asset ID file", default="sif.id")
+def launch(name, threads, priority, node_group, file, sif_filename, sif_id_file):
     """Launch a COMPS experiment with the specified parameters."""
     experiment = CompsExperiment(
         name=name,
         num_threads=threads,
         priority=priority,
-        node_group=node_group
+        node_group=node_group,
+        sif_filename=sif_filename,
+        sif_id_file=sif_id_file
     )
     
     # Plan the experiment with the file
