@@ -1,5 +1,6 @@
 # README
 
+`create` the image:
 ```
-comps_sif_constructor -d lolcow.def -i lolcow.sif
+uvx comps_sif_constructor create -d lolcow.def -i lolcow.sif
 ```
