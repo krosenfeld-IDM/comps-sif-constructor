@@ -11,7 +11,7 @@ This will launch the image creation on COMPS and leave behind a `sif.id` for the
 ## Usage
 
 ```bash
-comps_sif_constructor -h
+comps_sif_constructor --help
 ```
 
 The CLI has two main commands: `create` and `launch`.
@@ -21,13 +21,13 @@ The CLI has two main commands: `create` and `launch`.
 Create a Apptainer/Singularity image file on COMPS with `create`:
 
 ```bash
-comps_sif_constructor create -h
-usage: comps_sif_constructor create [-h] [--definition_file DEFINITION_FILE] [--output_id OUTPUT_ID] 
+comps_sif_constructor create --help
+usage: comps_sif_constructor create [--help] [--definition_file DEFINITION_FILE] [--output_id OUTPUT_ID] 
                                     [--image_name IMAGE_NAME] [--work_item_name WORK_ITEM_NAME] 
                                     [--requirements REQUIREMENTS]
 
 options:
-  -h, --help            show this help message and exit
+  --help                show this help message and exit
   --definition_file DEFINITION_FILE, -d DEFINITION_FILE
                         Path to the Singularity definition file
   --output_id OUTPUT_ID, -o OUTPUT_ID
@@ -56,13 +56,13 @@ Launch a COMPS experiment with specified parameters:
 
 ```bash
 comps_sif_constructor launch -h
-usage: comps_sif_constructor launch [-h] [--name NAME] [--threads THREADS] 
+usage: comps_sif_constructor launch [--help] [--name NAME] [--threads THREADS] 
                                    [--priority PRIORITY] [--node-group NODE_GROUP] 
                                    --file FILE [--sif-filename SIF_FILENAME]
                                    [--sif-id-file SIF_ID_FILE]
 
 options:
-  -h, --help            show this help message and exit
+  --help                show this help message and exit
   --name NAME, -n NAME  Name of the experiment
   --threads THREADS, -t THREADS
                         Number of threads to use
