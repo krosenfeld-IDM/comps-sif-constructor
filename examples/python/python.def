@@ -24,6 +24,7 @@ From: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 %labels
     Author katherine.rosenfeld@gatesfoundation.org
+    Date 04-29-2025
 
 %help
     Container for python projects using uv

@@ -1,2 +1,5 @@
+from comps_sif_constructor.cli import cli, create_sif_func
+
 def main():
-    print("Hello from comps-sif-constructor package entrypoint!")
+    """Entry point for the comps-sif-constructor package."""
+    cli()

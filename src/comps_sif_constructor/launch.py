@@ -62,7 +62,8 @@ class CompsExperiment:
     """
     A class to handle COMPS experiment deployment and management. An experiment is a collection of trials (e.g., simulations).
     """
-    def __init__(self, name='python', num_threads=1, priority="AboveNormal", node_group="idm_48cores"):
+    def __init__(self, name='python', num_threads=1, priority="AboveNormal", node_group="idm_48cores", 
+                 sif_filename="default.sif", sif_id_file="sif.id"):
         """
         Initialize the CompsExperiment.
         
@@ -71,6 +72,8 @@ class CompsExperiment:
             num_threads: Number of threads to use
             priority: Priority level for the experiment
             node_group: Node group to use
+            sif_filename: Name of the singularity image file
+            sif_id_file: Path to the asset ID file
         """
         self.name = name
         self.num_threads = num_threads
@@ -80,6 +83,8 @@ class CompsExperiment:
         self.trials_content = None
         self.run_script = None
         self.remote_script = None
+        self.sif_filename = sif_filename
+        self.sif_id_file = sif_id_file
 
     def plan(self, file_path=None, content: Optional[list[dict] | dict] = None):
         """
@@ -133,12 +138,12 @@ class CompsExperiment:
         platform = Platform("CALCULON", priority=self.priority)
 
         # create commandline input for the task
-        cmdline = "singularity exec ./Assets/python_0.0.1.sif bash run.sh"
+        cmdline = f"singularity exec ./Assets/{self.sif_filename} bash run.sh"
         command = CommandLine(cmdline)
         task = ConfigCommandTask(command=command)
 
         # Add our image
-        task.common_assets.add_assets(AssetCollection.from_id_file("sif.id"))
+        task.common_assets.add_assets(AssetCollection.from_id_file(self.sif_id_file))
 
         # Add simulation script
         task.transient_assets.add_or_replace_asset(Asset(filename="run.sh"))
@@ -166,7 +171,7 @@ class CompsExperiment:
             command=cmdline,
             NumNodes=1,
             num_cores=self.num_threads,
-            node_group_name="idm_48cores",
+            node_group_name=self.node_group,
             Environment={"NUMBA_NUM_THREADS": str(self.num_threads),
                         "PYTHONPATH": ".:./Assets"},
         )
