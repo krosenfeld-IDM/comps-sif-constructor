@@ -48,9 +48,9 @@ def cli(ctx):
 
 
 @cli.command('create')
-@click.option("--definition_file", "-d", type=str, help="Path to the Singularity definition file", default="lolcow.def")
+@click.option("--definition_file", "-d", type=str, help="Path to the Singularity definition file", default="apptainer.def")
 @click.option("--output_id", "-o", type=str, help="(optional) Name out Asset id file", default="sif.id")
-@click.option("--image_name", "-i", type=str, help="(optional) Name of the Singularity image file", default="lolcow_0.0.1.sif")
+@click.option("--image_name", "-i", type=str, help="(optional) Name of the Singularity image file", default="default.sif")
 @click.option("--work_item_name", "-w", type=str, help="(optional) Name of the work item", default="Singularity Build")
 @click.option("--requirements", "-r", type=str, help="(optional) Path to the requirements file", default=None)
 def create_sif(definition_file, output_id, image_name, work_item_name, requirements):
@@ -65,7 +65,7 @@ def create_sif(definition_file, output_id, image_name, work_item_name, requireme
               default="AboveNormal")
 @click.option("--node-group", "-g", type=str, help="Node group to use", default="idm_48cores")
 @click.option("--file", "-f", type=click.Path(exists=True), help="Path to the trials.jsonl file", required=True)
-@click.option("--sif-filename", "-s", type=str, help="Name of the singularity image file", default="python_0.0.1.sif")
+@click.option("--sif-filename", "-s", type=str, help="Name of the singularity image file", default="default.sif")
 @click.option("--sif-id-file", "-i", type=str, help="Path to the asset ID file", default="sif.id")
 def launch(name, threads, priority, node_group, file, sif_filename, sif_id_file):
     """Launch a COMPS experiment with the specified parameters."""

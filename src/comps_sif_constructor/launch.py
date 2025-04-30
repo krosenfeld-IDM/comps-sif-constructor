@@ -63,7 +63,7 @@ class CompsExperiment:
     A class to handle COMPS experiment deployment and management. An experiment is a collection of trials (e.g., simulations).
     """
     def __init__(self, name='python', num_threads=1, priority="AboveNormal", node_group="idm_48cores", 
-                 sif_filename="python_0.0.1.sif", sif_id_file="sif.id"):
+                 sif_filename="default.sif", sif_id_file="sif.id"):
         """
         Initialize the CompsExperiment.
         

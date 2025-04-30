@@ -2,7 +2,7 @@
 
 `create` the image:
 ```bash
-uvx comps_sif_constructor create -d python.def -i python.sif
+uvx comps_sif_constructor create -d python.def
 ```
 `launch` the experiment (e.g., trials / simulations):
 ```bash
