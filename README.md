@@ -3,17 +3,28 @@ Create SIF images for COMPS
 
 To use (with [uv](https://docs.astral.sh/uv/getting-started/installation/)):
 ```bash
-uvx comps_sif_constructor -d lolcow.def
+uvx comps_sif_constructor create -d lolcow.def
 ```
 
 This will launch the image creation on COMPS and leave behind a `sif.id` for the jobs that need the image.
 
 ## Usage
 
-
 ```bash
 comps_sif_constructor -h
-usage: comps_sif_constructor [-h] [--definition_file DEFINITION_FILE] [--output_id OUTPUT_ID] [--image_name IMAGE_NAME] [--work_item_name WORK_ITEM_NAME] [--requirements REQUIREMENTS]
+```
+
+The CLI has two main commands: `create` and `launch`.
+
+### Create SIF Image
+
+Create a Apptainer/Singularity image file on COMPS with `create`:
+
+```bash
+comps_sif_constructor create -h
+usage: comps_sif_constructor create [-h] [--definition_file DEFINITION_FILE] [--output_id OUTPUT_ID] 
+                                    [--image_name IMAGE_NAME] [--work_item_name WORK_ITEM_NAME] 
+                                    [--requirements REQUIREMENTS]
 
 options:
   -h, --help            show this help message and exit
@@ -29,10 +40,9 @@ options:
                         (optional) Path to the requirements file
 ```
 
-To create a Apptainer/Singularity image on COMPS from a definition file:
-
+Example:
 ```bash
-python -m comps_sif_constructor.create_sif \
+comps_sif_constructor create \
   -d <path_to_definition_file> \
   -o <output_id> \
   -i <image_name> \
@@ -40,16 +50,39 @@ python -m comps_sif_constructor.create_sif \
   [-r <requirements_file>]
 ```
 
-Or using the console script:
+### Launch COMPS Experiment
+
+Launch a COMPS experiment with specified parameters:
 
 ```bash
-comps_sif_constructor \
-  -d <path_to_definition_file> \
-  -o <output_id> \
-  -i <image_name> \
-  -w <work_item_name> \
-  [-r <requirements_file>]
+comps_sif_constructor launch -h
+usage: comps_sif_constructor launch [-h] [--name NAME] [--threads THREADS] 
+                                   [--priority PRIORITY] [--node-group NODE_GROUP] 
+                                   --file FILE
+
+options:
+  -h, --help            show this help message and exit
+  --name NAME, -n NAME  Name of the experiment
+  --threads THREADS, -t THREADS
+                        Number of threads to use
+  --priority PRIORITY, -p PRIORITY
+                        Priority level for the experiment
+  --node-group NODE_GROUP, -g NODE_GROUP
+                        Node group to use
+  --file FILE, -f FILE  Path to the trials.jsonl file
 ```
+
+Example:
+```bash
+comps_sif_constructor launch \
+  -n "My Experiment" \
+  -t 4 \
+  -p AboveNormal \
+  -g idm_48cores \
+  -f trials.jsonl
+```
+
+Launch expect a `run.sh` and `remote.py` to be colocated. You can also pass a `trials.jsonl`. See the `examples/` for more info.
 
 ## Resources
 - Learn about [definition files](https://apptainer.org/docs/user/latest/definition_files.html#definition-files)

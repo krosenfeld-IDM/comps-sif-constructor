@@ -44,8 +44,7 @@ def create_sif_func(definition_file, output_id, image_name, work_item_name, requ
 def cli(ctx):
     """Command line interface for comps-sif-constructor."""
     if ctx.invoked_subcommand is None:
-        # When no subcommand is provided, run the create_sif command with default arguments
-        ctx.invoke(create_sif)
+        pass
 
 
 @cli.command('create')
