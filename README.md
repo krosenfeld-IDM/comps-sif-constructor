@@ -58,7 +58,8 @@ Launch a COMPS experiment with specified parameters:
 comps_sif_constructor launch -h
 usage: comps_sif_constructor launch [-h] [--name NAME] [--threads THREADS] 
                                    [--priority PRIORITY] [--node-group NODE_GROUP] 
-                                   --file FILE
+                                   --file FILE [--sif-filename SIF_FILENAME]
+                                   [--sif-id-file SIF_ID_FILE]
 
 options:
   -h, --help            show this help message and exit
@@ -70,6 +71,10 @@ options:
   --node-group NODE_GROUP, -g NODE_GROUP
                         Node group to use
   --file FILE, -f FILE  Path to the trials.jsonl file
+  --sif-filename SIF_FILENAME, -s SIF_FILENAME
+                        Name of the singularity image file
+  --sif-id-file SIF_ID_FILE, -i SIF_ID_FILE
+                        Path to the asset ID file
 ```
 
 Example:
@@ -79,7 +84,9 @@ comps_sif_constructor launch \
   -t 4 \
   -p AboveNormal \
   -g idm_48cores \
-  -f trials.jsonl
+  -f trials.jsonl \
+  -s custom_image.sif \
+  -i custom_image.id
 ```
 
 Launch expect a `run.sh` and `remote.py` to be colocated. You can also pass a `trials.jsonl`. See the `examples/` for more info.
