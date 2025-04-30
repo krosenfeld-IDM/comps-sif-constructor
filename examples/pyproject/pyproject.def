@@ -1,0 +1,33 @@
+Bootstrap: docker
+From: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+
+%files
+    Assets/pyproject.toml    /workspace/pyproject.toml
+
+%post
+    # Set working directory
+    mkdir -p /workspace
+    cd /workspace
+    
+    # Initialize virtual environment
+    uv venv --python 3.12
+    . .venv/bin/activate
+    
+    # Install packages
+    uv pip install .
+
+%runscript
+    cd /workspace
+    . .venv/bin/activate
+
+%environment
+    export SHELL=/bin/bash
+    export PATH="/workspace/.venv/bin:$PATH"
+    
+
+%labels
+    Author katherine.rosenfeld@gatesfoundation.org
+    Date 04-30-2025
+
+%help
+    Container for python projects using uv

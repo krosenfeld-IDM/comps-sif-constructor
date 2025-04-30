@@ -1,13 +1,14 @@
 """
 CLI interface for comps-sif-constructor package.
 """
-
+import os
 import click
 import json
 import sys
 import traceback
 from pathlib import Path
 
+from idmtools.assets import Asset
 from comps_sif_constructor.launch import CompsExperiment
 from idmtools.core.platform_factory import Platform
 from idmtools_platform_comps.utils.singularity_build import SingularityBuildWorkItem
@@ -16,17 +17,15 @@ from idmtools.assets.file_list import FileList
 
 def create_sif_func(definition_file, output_id, image_name, work_item_name, requirements):
     """Function that creates a Singularity image file on COMPS."""
-    kwargs = {}
-    if requirements is not None:
-        kwargs["asset_files"] = FileList(files_in_root=[requirements])
 
     platform = Platform("CALCULON")
     sbi = SingularityBuildWorkItem(
         name=work_item_name,
         definition_file=definition_file,
         image_name=image_name,
-        **kwargs
     )
+    if requirements is not None:
+        sbi.assets.add_or_replace_asset(Asset(filename=requirements))
     sbi.tags = dict(my_key="my_value")
     try:
         sbi.run(wait_until_done=True, platform=platform)
