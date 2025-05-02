@@ -1,5 +1,4 @@
-name: Publish to PyPI and TestPyPi
-
+name: Publish to PyPI
 on:
   workflow_run:
     workflows: ["Bump version"]
@@ -13,6 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for tags
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -30,6 +31,19 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
+    - name: Get version
+      id: get_version
+      run: |
+        echo "VERSION=$(python -c 'from importlib.metadata import version; print(version("mcp_pack"))')" >> $GITHUB_OUTPUT
+    - name: Store version
+      run: |
+        echo "${{ steps.get_version.outputs.VERSION }}" > version.txt
+      shell: bash
+    - name: Upload version info
+      uses: actions/upload-artifact@v4
+      with:
+        name: version-info
+        path: version.txt
 
   publish-to-pypi:
     name: >-
@@ -39,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/comps_sif_constructor 
+      url: https://pypi.org/p/mcp_pack 
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
 
@@ -52,26 +66,41 @@ jobs:
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
 
-  publish-to-testpypi:
-    name: Publish Python 🐍 distribution 📦 to TestPyPI
+  create-github-release:
+    name: Create GitHub Release
     needs:
-    - build
+    - publish-to-pypi
     runs-on: ubuntu-latest
-
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/comps_sif_constructor
-
     permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing
-
+      contents: write  # Needed for creating releases
+      
     steps:
-    - name: Download all the dists
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for tags
+    - name: Download version info
+      uses: actions/download-artifact@v4
+      with:
+        name: version-info
+    - name: Set version variable
+      id: version
+      run: |
+        VERSION=$(cat version.txt)
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+    - name: Download distribution packages
       uses: actions/download-artifact@v4
       with:
         name: python-package-distributions
         path: dist/
-    - name: Publish distribution 📦 to TestPyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
       with:
-        repository-url: https://test.pypi.org/legacy/
+        tag_name: v${{ steps.version.outputs.VERSION }}
+        name: Release v${{ steps.version.outputs.VERSION }}
+        body: |
+          Release of mcp_pack version ${{ steps.version.outputs.VERSION }}
+          
+          See the [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+        files: |
+          dist/*
+        draft: false
