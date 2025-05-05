@@ -8,11 +8,14 @@ import sys
 import traceback
 from pathlib import Path
 
+from .create_auth_tokens import StaticCredentialPrompt
+from .launch import CompsExperiment
+
 from idmtools.assets import Asset
-from comps_sif_constructor.launch import CompsExperiment
 from idmtools.core.platform_factory import Platform
 from idmtools_platform_comps.utils.singularity_build import SingularityBuildWorkItem
 from idmtools.assets.file_list import FileList
+from COMPS import Client
 
 
 def create_sif_func(definition_file, output_id, image_name, work_item_name, requirements):
@@ -83,7 +86,21 @@ def launch(name, threads, priority, node_group, file, sif_filename, sif_id_file)
     # Deploy the experiment
     return experiment.deploy()
 
+@cli.command('login')
+@click.option("--comps_url", type=str, default='https://comps.idmod.org', help='comps url')
+@click.option("--username", "-u", type=str, help='Username')
+@click.option("--password", "-p", type=str, help='Password (use single quotes to avoid shell issues)')
+def login(comps_url, username, password):
+    """Login to COMPS with credentials."""
+    compshost = comps_url
+    username = username or os.getenv('COMPS_USERNAME')
+    password = password or os.getenv('COMPS_PASSWORD')
+    Client.login(compshost, StaticCredentialPrompt(comps_url=comps_url, 
+                                                    username=username,
+                                                    password=password))
+    print("Login successful")
 
+    
 def main():
     """Entry point for the CLI."""
     cli()
