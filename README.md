@@ -14,7 +14,7 @@ This will launch the image creation on COMPS and leave behind a `sif.id` for the
 comps_sif_constructor --help
 ```
 
-The CLI has two main commands: `create` and `launch`.
+The CLI has four main commands: `create`, `launch`, `gather`, and `login`.
 
 ### Create SIF Image
 
@@ -23,21 +23,18 @@ Create a Apptainer/Singularity image file on COMPS with `create`:
 ```bash
 comps_sif_constructor create --help
 usage: comps_sif_constructor create [--help] [--definition_file DEFINITION_FILE] [--output_id OUTPUT_ID] 
-                                    [--image_name IMAGE_NAME] [--work_item_name WORK_ITEM_NAME] 
-                                    [--requirements REQUIREMENTS]
+                                    [--work_item_name WORK_ITEM_NAME] [--requirements REQUIREMENTS]
 
 options:
   --help                show this help message and exit
   --definition_file DEFINITION_FILE, -d DEFINITION_FILE
-                        Path to the Singularity definition file
+                        Path to the Singularity definition file (default: apptainer.def)
   --output_id OUTPUT_ID, -o OUTPUT_ID
-                        (optional) Name out Asset id file
-  --image_name IMAGE_NAME, -i IMAGE_NAME
-                        (optional) Name of the Singularity image file
+                        Name out Asset id file (default: sif.id)
   --work_item_name WORK_ITEM_NAME, -w WORK_ITEM_NAME
-                        (optional) Name of the work item
+                        Name of the work item (default: Singularity Build)
   --requirements REQUIREMENTS, -r REQUIREMENTS
-                        (optional) Path to the requirements file
+                        Path to the requirements file
 ```
 
 Example:
@@ -45,7 +42,6 @@ Example:
 comps_sif_constructor create \
   -d <path_to_definition_file> \
   -o <output_id> \
-  -i <image_name> \
   -w <work_item_name> \
   [-r <requirements_file>]
 ```
@@ -55,26 +51,26 @@ comps_sif_constructor create \
 Launch a COMPS experiment with specified parameters:
 
 ```bash
-comps_sif_constructor launch -h
+comps_sif_constructor launch --help
 usage: comps_sif_constructor launch [--help] [--name NAME] [--threads THREADS] 
                                    [--priority PRIORITY] [--node-group NODE_GROUP] 
-                                   --file FILE [--sif-filename SIF_FILENAME]
-                                   [--sif-id-file SIF_ID_FILE]
+                                   --file FILE [--sif-id-file SIF_ID_FILE]
+                                   [--experiment-id-file EXPERIMENT_ID_FILE]
 
 options:
   --help                show this help message and exit
-  --name NAME, -n NAME  Name of the experiment
+  --name NAME, -n NAME  Name of the experiment (default: comps-sif-constructor experiment)
   --threads THREADS, -t THREADS
-                        Number of threads to use
+                        Number of threads to use (default: 1)
   --priority PRIORITY, -p PRIORITY
-                        Priority level for the experiment
+                        Priority level for the experiment (default: AboveNormal)
   --node-group NODE_GROUP, -g NODE_GROUP
-                        Node group to use
-  --file FILE, -f FILE  Path to the trials.jsonl file
-  --sif-filename SIF_FILENAME, -s SIF_FILENAME
-                        Name of the singularity image file
+                        Node group to use (default: idm_48cores)
+  --file FILE, -f FILE  Path to the trials.jsonl file (REQUIRED)
   --sif-id-file SIF_ID_FILE, -i SIF_ID_FILE
-                        Path to the asset ID file
+                        Path to the asset ID file (default: sif.id)
+  --experiment-id-file EXPERIMENT_ID_FILE, -o EXPERIMENT_ID_FILE
+                        Path to the output id file (default: experiment.id)
 ```
 
 Example:
@@ -85,11 +81,58 @@ comps_sif_constructor launch \
   -p AboveNormal \
   -g idm_48cores \
   -f trials.jsonl \
-  -s custom_image.sif \
-  -i custom_image.id
+  -i sif.id \
+  -o experiment.id
 ```
 
-Launch expect a `run.sh` and `remote.py` to be colocated. You can also pass a `trials.jsonl`. See the `examples/` for more info.
+### Gather Experiment Data
+
+Gather data from a COMPS experiment:
+
+```bash
+comps_sif_constructor gather --help
+usage: comps_sif_constructor gather [--help] [--experiment-id EXPERIMENT_ID] [--output OUTPUT]
+
+options:
+  --help                show this help message and exit
+  --experiment-id EXPERIMENT_ID, -e EXPERIMENT_ID
+                        Experiment id (default: experiment.id)
+  --output OUTPUT, -o OUTPUT
+                        Output file (default: data_brick.json)
+```
+
+Example:
+```bash
+comps_sif_constructor gather \
+  -e experiment.id \
+  -o data_brick.json
+```
+
+### Login
+Save your COMPS credentials using the login command:
+
+```bash
+comps_sif_constructor login --help
+usage: comps_sif_constructor login [--help] [--comps_url COMPS_URL] [--username USERNAME] [--password PASSWORD]
+
+options:
+  --help                show this help message and exit
+  --comps_url COMPS_URL
+                        COMPS URL (default: https://comps.idmod.org)
+  --username USERNAME, -u USERNAME
+                        Username (can also use COMPS_USERNAME environment variable)
+  --password PASSWORD, -p PASSWORD
+                        Password (can also use COMPS_PASSWORD environment variable)
+```
+
+Example:
+```bash
+comps_sif_constructor login \
+  -u your_username \
+  -p 'your_password'
+```
+
+You can also set `COMPS_USERNAME` and `COMPS_PASSWORD` as environment variables to avoid entering credentials each time.
 
 ## Resources
 - Learn about [definition files](https://apptainer.org/docs/user/latest/definition_files.html#definition-files)
