@@ -2,12 +2,20 @@
 
 `create` the image:
 ```bash
-uvx comps_sif_constructor create -d python.def
+comps_sif_constructor create -d python.def
 ```
+
 `launch` the experiment (e.g., trials / simulations):
 ```bash
-uvx comps_sif_constructor launch --name python --file trials_.jsonl
+comps_sif_constructor launch --name python --file trials_.jsonl
 ```
+
+`gather` the results
+```bash
+comps_sif_constructor gather
+```
+
+## Related
 
 Checkout the base docker image locally:
 ```bash
