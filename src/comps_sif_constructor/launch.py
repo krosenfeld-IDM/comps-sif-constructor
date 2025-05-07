@@ -5,6 +5,8 @@ import json
 from dataclasses import dataclass, field
 from typing import Optional
 
+from . import defaults
+
 from idmtools.assets import AssetCollection, Asset
 from idmtools.entities.command_task import CommandTask
 from idmtools.core.platform_factory import Platform
@@ -13,6 +15,23 @@ from idmtools.builders import SimulationBuilder
 from idmtools.entities.experiment import Experiment
 from idmtools.entities.templated_simulation import TemplatedSimulations
 from idmtools_platform_comps.utils.scheduling import add_schedule_config
+
+def launch(name, threads, priority, node_group, file, experiment_id_file, sif_id_file=defaults.SIF_ID_FILE, sif_file=defaults.SIF_FILE):
+    """Launch a COMPS experiment with the specified parameters."""
+    experiment = CompsExperiment(
+        name=name,
+        num_threads=threads,
+        priority=priority,
+        node_group=node_group,
+        sif_id_file=sif_id_file,
+        sif_file=sif_file,
+    )
+    
+    # Plan the experiment with the file
+    experiment.plan(file_path=file)
+    
+    # Deploy the experiment
+    experiment.deploy(experiment_id_file=experiment_id_file)
 
 @dataclass
 class ConfigCommandTask(CommandTask):
@@ -62,18 +81,18 @@ class CompsExperiment:
     """
     A class to handle COMPS experiment deployment and management. An experiment is a collection of trials (e.g., simulations).
     """
-    def __init__(self, name='python', num_threads=1, priority="AboveNormal", node_group="idm_48cores", 
-                 sif_filename="default.sif", sif_id_file="sif.id"):
+    def __init__(self, name: str = 'python', num_threads: int = 1, priority: str = "AboveNormal", node_group: str = "idm_48cores", 
+                 sif_id_file: str = defaults.SIF_ID_FILE, sif_file: str = defaults.SIF_FILE):
         """
         Initialize the CompsExperiment.
         
         Args:
-            name: Name of the experiment
-            num_threads: Number of threads to use
-            priority: Priority level for the experiment
-            node_group: Node group to use
-            sif_filename: Name of the singularity image file
-            sif_id_file: Path to the asset ID file
+            name (str): Name of the experiment
+            num_threads (int): Number of threads to use
+            priority (str): Priority level for the experiment
+            node_group (str): Node group to use
+            sif_id_file (str): Path to the asset ID file
+            sif_file (str): Name of the singularity image file
         """
         self.name = name
         self.num_threads = num_threads
@@ -83,7 +102,7 @@ class CompsExperiment:
         self.trials_content = None
         self.run_script = None
         self.remote_script = None
-        self.sif_filename = sif_filename
+        self.sif_file = sif_file
         self.sif_id_file = sif_id_file
 
     def plan(self, file_path=None, content: Optional[list[dict] | dict] = None):
@@ -132,13 +151,13 @@ class CompsExperiment:
         
         return self
 
-    def deploy(self):
+    def deploy(self, experiment_id_file:str = 'experiment.id'):
         """Deploy the experiment to COMPS."""
         # Create a platform to run the workitem
         platform = Platform("CALCULON", priority=self.priority)
 
         # create commandline input for the task
-        cmdline = f"singularity exec ./Assets/{self.sif_filename} bash run.sh"
+        cmdline = f"singularity exec ./Assets/{self.sif_file} bash run.sh"
         command = CommandLine(cmdline)
         task = ConfigCommandTask(command=command)
 
@@ -180,8 +199,11 @@ class CompsExperiment:
 
         if experiment.succeeded:
             # Setup analyzers
-            experiment.to_id_file("experiment.id")
+            experiment.to_id_file(f"{experiment_id_file}")
             print(f"Experiment {experiment.id} succeeded")
             return experiment
         else:
             raise RuntimeWarning("Experiment failed")
+        
+if __name__ == "__main__":
+    launch(name="test_launch", threads=1, priority="AboveNormal", node_group="idm_48cores", file="trials.jsonl", experiment_id_file="experiment.id")
