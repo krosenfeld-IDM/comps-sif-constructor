@@ -87,12 +87,15 @@ def gather(experiment_id: str, output: Optional[str] = None):
                 trial_index = int(v.pop("trial_index"))
             else:
                 trial_index = i
+            # do not save the task type
             v.pop("task_type")
-            results[trial_index] = {k:tuple(v_list) for k, v_list in v.items()}
+            results[trial_index] = {k:v_list for k, v_list in v.items()}
 
     if output is not None and output != "NONE":
+        print(f"Saving results to {output}")
         with open(output, "w") as f:
             json.dump(results, f)
         return None
     else:
+        print(f"Returning results")
         return results
