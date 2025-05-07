@@ -26,6 +26,8 @@ dependencies = [
     "tqdm>=4.67.1",
     "xdg>=6.0.0",
 ]
+license = "Apache-2.0"
+
 
 [project.scripts]
 comps_sif_constructor = "comps_sif_constructor.main:main"
