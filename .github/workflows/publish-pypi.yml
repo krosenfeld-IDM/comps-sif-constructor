@@ -34,7 +34,7 @@ jobs:
     - name: Get version
       id: get_version
       run: |
-        echo "VERSION=$(python -c 'from importlib.metadata import version; print(version("mcp_pack"))')" >> $GITHUB_OUTPUT
+        echo "VERSION=$(python -c 'import comps_sif_constructor; print(comps_sif_constructor.__version__)')" >> $GITHUB_OUTPUT
     - name: Store version
       run: |
         echo "${{ steps.get_version.outputs.VERSION }}" > version.txt
